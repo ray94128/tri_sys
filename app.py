@@ -22,7 +22,7 @@ def show_login():
     if st.button("登入"):
         try:
             # 檢查用戶
-            result = execute_query("SELECT * FROM [user] WHERE userid = ? AND pwd = ?", (userid, pwd))
+            result = execute_query("SELECT * FROM [user] WHERE userid = :uid AND pwd = :pwd", {"uid": userid, "pwd": pwd})
             if result:
                 st.session_state.logged_in = True
                 st.session_state.username = result[0]['username']

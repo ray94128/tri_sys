@@ -34,8 +34,8 @@ def show_cust_maintenance():
                 st.warning("客戶代碼與名稱為必填")
             else:
                 try:
-                    execute_modify("INSERT INTO cust (cust_code, cust_name, remark) VALUES (?, ?, ?)", 
-                                   (new_code, new_name, new_remark))
+                    execute_modify("INSERT INTO cust (cust_code, cust_name, remark) VALUES (:code, :name, :remark)", 
+                                   {"code": new_code, "name": new_name, "remark": new_remark})
                     st.success("新增成功！")
                     st.rerun()
                 except Exception as e:
@@ -55,8 +55,8 @@ def show_cust_maintenance():
                 with col1:
                     if st.form_submit_button("更新"):
                         try:
-                            execute_modify("UPDATE cust SET cust_name = ?, remark = ? WHERE cust_code = ?", 
-                                           (edit_name, edit_remark, target_code))
+                            execute_modify("UPDATE cust SET cust_name = :name, remark = :remark WHERE cust_code = :code", 
+                                           {"name": edit_name, "remark": edit_remark, "code": target_code})
                             st.success("更新成功！")
                             st.rerun()
                         except Exception as e:
@@ -64,7 +64,7 @@ def show_cust_maintenance():
                 with col2:
                     if st.form_submit_button("刪除"):
                         try:
-                            execute_modify("DELETE FROM cust WHERE cust_code = ?", (target_code,))
+                            execute_modify("DELETE FROM cust WHERE cust_code = :code", {"code": target_code})
                             st.success("刪除成功！")
                             st.rerun()
                         except Exception as e:

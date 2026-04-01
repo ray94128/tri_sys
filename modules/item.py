@@ -44,8 +44,8 @@ def show_item_maintenance():
                 st.warning("商品代碼與名稱為必填")
             else:
                 try:
-                    execute_modify("INSERT INTO item (item_code, item_name, fact_code) VALUES (?, ?, ?)", 
-                                   (new_code, new_name, new_fact_code))
+                    execute_modify("INSERT INTO item (item_code, item_name, fact_code) VALUES (:code, :name, :fcode)", 
+                                   {"code": new_code, "name": new_name, "fcode": new_fact_code})
                     st.success("新增成功！")
                     st.rerun()
                 except Exception as e:
@@ -70,8 +70,8 @@ def show_item_maintenance():
                 with col1:
                     if st.form_submit_button("更新"):
                         try:
-                            execute_modify("UPDATE item SET item_name = ?, fact_code = ? WHERE item_code = ?", 
-                                           (edit_name, edit_fact_code, target_code))
+                            execute_modify("UPDATE item SET item_name = :name, fact_code = :fcode WHERE item_code = :code", 
+                                           {"name": edit_name, "fcode": edit_fact_code, "code": target_code})
                             st.success("更新成功！")
                             st.rerun()
                         except Exception as e:
@@ -79,7 +79,7 @@ def show_item_maintenance():
                 with col2:
                     if st.form_submit_button("刪除"):
                         try:
-                            execute_modify("DELETE FROM item WHERE item_code = ?", (target_code,))
+                            execute_modify("DELETE FROM item WHERE item_code = :code", {"code": target_code})
                             st.success("刪除成功！")
                             st.rerun()
                         except Exception as e:

@@ -8,7 +8,7 @@ def show_user_maintenance():
     # 1. 查詢功能
     st.subheader("查詢用戶")
     search_term = st.text_input("輸入用戶代碼或名稱進行過濾")
-    query = "SELECT userid, username, pwd FROM [user]"  # user 是關鍵字，需加中括號
+    query = "SELECT userid, username, pwd FROM [user]"
     if search_term:
         query += f" WHERE userid LIKE '%{search_term}%' OR username LIKE '%{search_term}%'"
     
@@ -34,8 +34,8 @@ def show_user_maintenance():
                 st.warning("所有欄位均為必填")
             else:
                 try:
-                    execute_modify("INSERT INTO [user] (userid, username, pwd) VALUES (?, ?, ?)", 
-                                   (new_id, new_name, new_pwd))
+                    execute_modify("INSERT INTO [user] (userid, username, pwd) VALUES (:uid, :name, :pwd)", 
+                                   {"uid": new_id, "name": new_name, "pwd": new_pwd})
                     st.success("新增成功！")
                     st.rerun()
                 except Exception as e:
@@ -55,8 +55,8 @@ def show_user_maintenance():
                 with col1:
                     if st.form_submit_button("更新"):
                         try:
-                            execute_modify("UPDATE [user] SET username = ?, pwd = ? WHERE userid = ?", 
-                                           (edit_name, edit_pwd, target_id))
+                            execute_modify("UPDATE [user] SET username = :name, pwd = :pwd WHERE userid = :uid", 
+                                           {"name": edit_name, "pwd": edit_pwd, "uid": target_id})
                             st.success("更新成功！")
                             st.rerun()
                         except Exception as e:
@@ -64,7 +64,7 @@ def show_user_maintenance():
                 with col2:
                     if st.form_submit_button("刪除"):
                         try:
-                            execute_modify("DELETE FROM [user] WHERE userid = ?", (target_id,))
+                            execute_modify("DELETE FROM [user] WHERE userid = :uid", {"uid": target_id})
                             st.success("刪除成功！")
                             st.rerun()
                         except Exception as e:
