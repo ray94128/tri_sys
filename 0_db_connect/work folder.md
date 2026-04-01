@@ -1,0 +1,1 @@
+C:\Users\ME\OneDrive\文件\Obsidian Vault\tri_sys
